@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Jobs\NotifyUserOnTask;
 use Illuminate\Support\Facades\Auth;
 
 class TaskService
@@ -14,7 +15,14 @@ class TaskService
     {
         $data['created_by'] = Auth::id();
 
-        return Task::create($data);
+        $task = Task::create($data);
+
+        // Notify user if assigned upon creation
+        if ($task->assigned_to) {
+            $task->assignedTo->notify(new \App\Notifications\TaskAssignedNotification($task));
+        }
+
+        return $task;
     }
 
     /**
@@ -22,7 +30,16 @@ class TaskService
      */
     public function updateTask(Task $task, array $data): bool
     {
-        return $task->update($data);
+        $oldAssignee = $task->assigned_to;
+        
+        $updated = $task->update($data);
+
+        // Notify new user if re-assigned during update
+        if ($updated && $task->assigned_to && $oldAssignee !== $task->assigned_to) {
+            $task->assignedTo->notify(new \App\Notifications\TaskAssignedNotification($task));
+        }
+
+        return $updated;
     }
 
     /**
