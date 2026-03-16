@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import Pagination from '@/Components/Pagination';
 import { Task } from '@/types';
 
 interface Props {
@@ -22,7 +23,7 @@ export default function Index({ tasks }: Props) {
 
     const priorityColor = (priority: string) => {
         switch (priority) {
-            case 'low': return 'text-gray-500';
+            case 'low': return 'text-gray-200';
             case 'medium': return 'text-yellow-500';
             case 'high': return 'text-red-500';
             default: return 'text-gray-500';
@@ -72,7 +73,7 @@ export default function Index({ tasks }: Props) {
                                                 </Link>
                                             </td>
                                             <td className="px-4 py-2">
-                                                <span className={`px-2 py-0.5 rounded text-white text-[10px] ${statusColor(task.status)}`}>
+                                                <span className={`block px-2 py-0.5 rounded text-white text-[10px] text-nowrap text-center font-semibold ${statusColor(task.status)}`}>
                                                     {task.status.replace('_', ' ').toUpperCase()}
                                                 </span>
                                             </td>
@@ -97,6 +98,7 @@ export default function Index({ tasks }: Props) {
                             </table>
                         </div>
                     </div>
+                    {tasks.meta && <Pagination links={tasks.meta.links} />}
                 </div>
             </div>
         </AuthenticatedLayout>
