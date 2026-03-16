@@ -1,14 +1,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import Pagination from '@/Components/Pagination';
 import { Project, Task } from '@/types';
 
 interface Props {
     project: {
-        data: Project & { tasks: { data: Task[] } };
+        data: Project;
+    };
+    tasks: {
+        data: Task[];
+        meta: any;
+        links: any;
     };
 }
 
-export default function Show({ project }: Props) {
+export default function Show({ project, tasks }: Props) {
     const data = project.data;
     
     const statusColor = (status: string) => {
@@ -65,7 +71,7 @@ export default function Show({ project }: Props) {
                                         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Status</label>
                                         <p className="mt-1">
                                             <span className={`px-2 py-1 rounded text-white text-xs ${statusColor(data.status)}`}>
-                                                {data.status.replace('_', ' ').toUpperCase()}
+                                                {data.status?.replace('_', ' ').toUpperCase()}
                                             </span>
                                         </p>
                                     </div>
@@ -86,14 +92,16 @@ export default function Show({ project }: Props) {
                             <div className="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                                 <div className="flex justify-between items-center mb-6">
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Tasks</h3>
-                                    <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow text-sm hover:bg-emerald-600">
+                                    <Link 
+                                        href={route('tasks.create', { project_id: data.id })}
+                                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow text-sm hover:bg-emerald-600">
                                         Add Task
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 <div className="space-y-3">
-                                    {data.tasks.data.length > 0 ? (
-                                        data.tasks.data.map((task) => (
+                                    {tasks.data?.length > 0 ? (
+                                        tasks.data.map((task) => (
                                             <div key={task.id} className="p-4 border dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow">
                                                 <div className="flex justify-between items-start">
                                                     <div>
@@ -107,7 +115,7 @@ export default function Show({ project }: Props) {
                                                 <div className="mt-4 flex justify-between items-center">
                                                     <div className="flex items-center space-x-3">
                                                         <span className={`px-2 py-0.5 rounded text-white text-[10px] ${statusColor(task.status)}`}>
-                                                            {task.status.replace('_', ' ').toUpperCase()}
+                                                            {task.status?.replace('_', ' ').toUpperCase()}
                                                         </span>
                                                         <span className="text-[10px] text-gray-400">Due: {task.due_date || 'N/A'}</span>
                                                     </div>
@@ -121,6 +129,7 @@ export default function Show({ project }: Props) {
                                         <p className="text-center py-12 text-gray-500 dark:text-gray-400">No tasks found for this project.</p>
                                     )}
                                 </div>
+                                {tasks.meta && <Pagination links={tasks.meta.links} />}
                             </div>
                         </div>
                     </div>

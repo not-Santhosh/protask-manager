@@ -34,6 +34,14 @@ class ProjectController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('Projects/Create');
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreProjectRequest $request)
@@ -49,9 +57,25 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['creator', 'tasks.assignedTo', 'tasks.creator']);
+        $project->load(['creator']);
+
+        $tasks = $project->tasks()
+            ->with(['assignedTo', 'creator'])
+            ->latest()
+            ->paginate(10);
 
         return Inertia::render('Projects/Show', [
+            'project' => new ProjectResource($project),
+            'tasks' => \App\Http\Resources\TaskResource::collection($tasks),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Project $project)
+    {
+        return Inertia::render('Projects/Edit', [
             'project' => new ProjectResource($project),
         ]);
     }

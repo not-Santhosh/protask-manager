@@ -34,14 +34,43 @@ class TaskController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $projects = \App\Models\Project::orderBy('name')->get();
+        $users = \App\Models\User::orderBy('name')->get();
+
+        return Inertia::render('Tasks/Create', [
+            'projects' => \App\Http\Resources\ProjectResource::collection($projects),
+            'users' => \App\Http\Resources\UserResource::collection($users),
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTaskRequest $request)
     {
         $this->taskService->createTask($request->validated());
 
-        return redirect()->back()
+        return redirect()->route('projects.show', $request->project_id)
             ->with('success', 'Task created successfully');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Task $task)
+    {
+        $projects = \App\Models\Project::orderBy('name')->get();
+        $users = \App\Models\User::orderBy('name')->get();
+
+        return Inertia::render('Tasks/Edit', [
+            'task' => new TaskResource($task),
+            'projects' => \App\Http\Resources\ProjectResource::collection($projects),
+            'users' => \App\Http\Resources\UserResource::collection($users),
+        ]);
     }
 
     /**
@@ -51,7 +80,7 @@ class TaskController extends Controller
     {
         $this->taskService->updateTask($task, $request->validated());
 
-        return redirect()->back()
+        return redirect()->route('projects.show', $task->project_id)
             ->with('success', "Task \"{$task->name}\" was updated");
     }
 
