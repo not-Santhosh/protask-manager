@@ -6,6 +6,7 @@ import { Head, useForm, Link } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import { Project, User } from '@/types';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SelectInput from '@/Components/SelectInput';
 
 export default function Create({ projects, users }: { projects: { data: Project[] }, users: { data: User[] } }) {
     const params = new URLSearchParams(window.location.search);
@@ -50,19 +51,14 @@ export default function Create({ projects, users }: { projects: { data: Project[
                             <form onSubmit={submit}>
                                 <div className="mt-4">
                                     <InputLabel htmlFor="project_id" value="Project" />
-                                    <select
-                                        id="project_id"
+                                    <SelectInput 
+                                        id='project_id'
                                         name="project_id"
                                         value={data.project_id}
-                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         onChange={(e) => setData('project_id', e.target.value)}
                                         required
-                                    >
-                                        <option value="">Select a Project</option>
-                                        {projects.data.map(p => (
-                                            <option key={p.id} value={p.id}>{p.name}</option>
-                                        ))}
-                                    </select>
+                                        options={projects.data.map((p) =>{return  {value: p.id, label:p.name}})}
+                                    />
                                     <InputError message={errors.project_id} className="mt-2" />
                                 </div>
 

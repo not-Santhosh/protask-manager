@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Inertia\Inertia;
@@ -24,7 +24,7 @@ class UserController extends Controller
         return Inertia::render('Users/Create', []);
     }
 
-    public function store(UserRequest $request)
+    public function store(StoreUserRequest $request)
     {
         $validated = $request->validated();
 
@@ -45,7 +45,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UserRequest $request, User $user)
+    public function update(StoreUserRequest $request, User $user)
     {
         $user->syncRoles($request->validated('roles'));
 

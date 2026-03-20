@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TaskResource;
 use App\Services\DashboardService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -17,11 +19,16 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $metrics = $this->dashboardService->getMetrics();
-        $activeTasks = $this->dashboardService->getActiveTasks();
+        $user = Auth::user();
 
-        return Inertia::render('Dashboard', array_merge($metrics, [
+        [$metrics, $activeTasks] = Concurrency::run([
+            fn() => $this->dashboardService->getMetrics($user),
+            fn() => $this->dashboardService->getActiveTasks($user),
+        ]);
+
+        return Inertia::render('Dashboard', [
+             ...$metrics,
             'activeTasks' => TaskResource::collection($activeTasks),
-        ]));
+        ]);
     }
 }
