@@ -67,9 +67,12 @@ export default function Index({ projects }: Props) {
                                                 <Link href={route('projects.edit', project.id)} className="text-blue-500 hover:underline mx-2">
                                                     Edit
                                                 </Link>
-                                                <button className="text-red-500 hover:underline mx-2">
-                                                    Delete
-                                                </button>
+                                                <form action={route('projects.destroy', project.id)} method="post" className="inline">
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <button type="submit" className="text-red-500 hover:underline mx-2">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     ))}

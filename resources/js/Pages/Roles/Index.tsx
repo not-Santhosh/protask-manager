@@ -57,9 +57,13 @@ export default function Index({roles}: Props) {
                                                 <Link href={route('roles.edit', role.id)} className="text-blue-500 hover:underline mx-2">
                                                     Manage
                                                 </Link>
-                                                <button className="text-red-500 hover:underline mx-2">
-                                                    Delete
-                                                </button>
+                                                <form action={route('roles.destroy', role.id)} method="post" className="inline">
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''} />
+                                                    <button type="submit" className="text-red-500 hover:underline mx-2">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     )):

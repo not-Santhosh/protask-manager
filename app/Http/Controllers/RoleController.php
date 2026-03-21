@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -40,12 +42,15 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        $role = Role::where('id', $id)->first();
-        $permission = Permission::all();
+        $role = Role::with('permissions')->where('id', $id)->first();
+
+        $allPermissions = Cache::remember('permissions', now()->addMinutes(10), function () {
+            return Permission::all();
+        });
 
         return Inertia::render('Roles/Manage', [
             'role' => $role,
-            'permission' => $permission
+            'permissions' => $allPermissions
         ]);
     }
 
@@ -53,9 +58,17 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRoleRequest $request, string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+
+        $role->update([
+            'name' => $request->name,
+        ]);
+
+        $role->syncPermissions($request->permissions);
+
+        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
     /**
@@ -63,6 +76,9 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $role->delete();
+
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 }
