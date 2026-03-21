@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('tasks', TaskController::class);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
+    Route::put('/users/reset-password/{user}', [UserController::class, 'resetPassword'])->name('users.reset-password');
 });
 
 Route::middleware('auth')->group(function () {

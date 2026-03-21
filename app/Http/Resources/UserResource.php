@@ -18,7 +18,9 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'roles' => $this->whenLoaded('roles', fn() => $this->roles->pluck('name')),
+            'status' => $this->status,
+            'phone_number' => $this->phone_number,
+            'role' => !empty($this->whenLoaded('roles')[0]) ? $this->whenLoaded('roles')[0] : [], 
             'created_at' => $this->created_at?->format('Y-m-d'),
         ];
     }

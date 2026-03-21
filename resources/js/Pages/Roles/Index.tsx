@@ -8,6 +8,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { FormEventHandler } from "react";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
 
 interface Props {
     roles: {
@@ -125,6 +126,7 @@ const NewRoleModal = ({
                             className="mt-1 w-full"
                             required
                         />
+                        <InputError message={errors.name} className="mt-2"/>
                     </div>
                     <div className="px-6 py-4 border-t border-gray-400 bg-white dark:bg-gray-900 flex justify-end gap-3">
                         <SecondaryButton onClick={handleClick}>

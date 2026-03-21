@@ -4,10 +4,11 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SelectInput from '@/Components/SelectInput';
 import TextInput from '@/Components/TextInput';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
+import { Role } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
-export default function Register() {
+export default function Create({roles}: {roles: Role[]}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -91,7 +92,7 @@ export default function Register() {
                                         <InputLabel htmlFor='role' value='Role' />
                                         <SelectInput 
                                             name='role' 
-                                            options={[{value: 'admin', label: 'Admin'}, {value: 'user', label: 'User'}]}
+                                            options={roles.map(role => ({value: role.id, label: role.name}))}
                                             value={data.role}
                                             onChange={(e) => setData('role', e.target.value)}
                                             required
