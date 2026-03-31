@@ -58,7 +58,7 @@ export default function Dashboard({
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Task Status Overview */}
                         <div className="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                            <h3 className="text-lg font-semibold mb-6">Task Status Overview</h3>
+                            <h3 className="text-lg font-semibold text-gray-500 mb-6">Task Status Overview</h3>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600 dark:text-gray-400">Pending</span>
@@ -87,7 +87,7 @@ export default function Dashboard({
                         {/* Recent Active Tasks */}
                         <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-lg font-semibold">My Active Tasks</h3>
+                                <h3 className="text-lg text-gray-500 font-semibold">My Active Tasks</h3>
                                 <Link href={route('tasks.index')} className="text-sm text-blue-500 hover:underline">View All</Link>
                             </div>
                             <div className="space-y-4">

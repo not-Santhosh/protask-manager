@@ -3,6 +3,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
+import { useEcho } from '@laravel/echo-react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 export default function Authenticated({
@@ -11,8 +12,15 @@ export default function Authenticated({
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    useEcho(
+        `task.assigned.${user.id}`,
+        'TaskAssignedEvent',
+        (e) => {
+            console.log(e.order);
+        },
+    );
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -44,6 +52,18 @@ export default function Authenticated({
                                     active={route().current('tasks.*')}
                                 >
                                     Tasks
+                                </NavLink>
+                                <NavLink
+                                    href={route('users.index')}
+                                    active={route().current('users.*')}
+                                >
+                                    Users
+                                </NavLink>
+                                <NavLink
+                                    href={route('roles.index')}
+                                    active={route().current('roles.*')}
+                                >
+                                    Roles
                                 </NavLink>
                             </div>
                         </div>
@@ -148,6 +168,24 @@ export default function Authenticated({
                             active={route().current('dashboard')}
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('projects.index')}
+                            active={route().current('projects.*')}
+                        >
+                            Projects
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('tasks.index')}
+                            active={route().current('tasks.*')}
+                        >
+                            Tasks
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('users.index')}
+                            active={route().current('users.*')}
+                        >
+                            Users
                         </ResponsiveNavLink>
                     </div>
 

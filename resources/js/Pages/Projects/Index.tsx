@@ -26,14 +26,14 @@ export default function Index({ projects }: Props) {
             <Head title="Projects" />   
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div className="flex justify-end items-center mb-4">
-                    <Link
-                        href={route('projects.create')}
-                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
-                    >
-                        Add New
-                    </Link>
-                </div>
+                    <div className="flex justify-end items-center mb-4">
+                        <Link
+                            href={route('projects.create')}
+                            className="bg-emerald-700 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-800 font-semibold"
+                        >
+                            Add New
+                        </Link>
+                    </div>
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <table className="w-full text-left border-collapse">
@@ -57,7 +57,7 @@ export default function Index({ projects }: Props) {
                                                 </Link>
                                             </td>
                                             <td className="px-4 py-2">
-                                                <span className={`px-2 py-1 rounded text-white text-xs ${statusColor(project.status)}`}>
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusColor(project.status)}`}>
                                                     {project.status.replace('_', ' ').toUpperCase()}
                                                 </span>
                                             </td>
@@ -67,9 +67,12 @@ export default function Index({ projects }: Props) {
                                                 <Link href={route('projects.edit', project.id)} className="text-blue-500 hover:underline mx-2">
                                                     Edit
                                                 </Link>
-                                                <button className="text-red-500 hover:underline mx-2">
-                                                    Delete
-                                                </button>
+                                                <form action={route('projects.destroy', project.id)} method="post" className="inline">
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <button type="submit" className="text-red-500 hover:underline mx-2">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     ))}

@@ -44,6 +44,14 @@ export default function Index({ tasks }: Props) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div className="flex justify-end items-center mb-4">
+                        <Link
+                            href={route('tasks.create')}
+                            className="bg-emerald-700 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-800 font-semibold"
+                        >
+                            Add New
+                        </Link>
+                    </div>
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <table className="w-full text-left border-collapse">
@@ -73,7 +81,7 @@ export default function Index({ tasks }: Props) {
                                                 </Link>
                                             </td>
                                             <td className="px-4 py-2">
-                                                <span className={`block px-2 py-0.5 rounded text-white text-[10px] text-nowrap text-center font-semibold ${statusColor(task.status)}`}>
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold text-nowrap ${statusColor(task.status)}`}>
                                                     {task.status.replace('_', ' ').toUpperCase()}
                                                 </span>
                                             </td>
@@ -82,7 +90,7 @@ export default function Index({ tasks }: Props) {
                                                     {task.priority}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-2 text-sm">{task.due_date}</td>
+                                            <td className="px-4 py-2 text-sm text-nowrap">{task.due_date}</td>
                                             <td className="px-4 py-2 text-sm italic">{task.assigned_to?.name || 'Unassigned'}</td>
                                             <td className="px-4 py-2 text-right">
                                                 <Link href={route('tasks.edit', task.id)} className="text-blue-500 hover:underline mx-2">

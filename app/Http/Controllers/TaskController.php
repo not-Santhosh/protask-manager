@@ -67,7 +67,7 @@ class TaskController extends Controller
         $users = \App\Models\User::orderBy('name')->get();
 
         return Inertia::render('Tasks/Edit', [
-            'task' => new TaskResource($task),
+            'task' => new TaskResource($task->load(['project', 'assignedTo', 'creator'])),
             'projects' => \App\Http\Resources\ProjectResource::collection($projects),
             'users' => \App\Http\Resources\UserResource::collection($users),
         ]);
